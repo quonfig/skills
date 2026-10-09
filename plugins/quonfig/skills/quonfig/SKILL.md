@@ -51,13 +51,14 @@ edit the JSON there and run `qfg verify`.
 3. **Gate the code** with the SDK's flag call and a context that identifies
    who is asking (at minimum `user.key`, so rollouts and targeting work):
    - Node: `quonfig.isEnabled("checkout.new-flow", { user: { key: user.id } })`
-   - Go: `client.FeatureIsOn("checkout.new-flow", ctx)`
+   - Go: `on, _ := client.FeatureIsOn("checkout.new-flow", ctx)`
    - Python: `client.is_feature_enabled("checkout.new-flow", contexts={"user": {"key": user.id}})`
    - others: see the language reference.
    Keep the off path identical to today's behavior, so the flag can ship dark.
 4. **Turn it on where it is safe** — normally development first:
-   `qfg set-default checkout.new-flow --value=true --environment=development`.
-   Always name the environment. Do not change production (or roll out there)
+   `qfg set-default checkout.new-flow --value=true --environment=development --confirm`.
+   Always name the environment. (`--confirm` skips the interactive prompt —
+   without a terminal, `set-default` and `set-rollout` refuse to run without it.) Do not change production (or roll out there)
    unless the human asked for it.
 5. **Tell the human** the key, which environments serve what, and the rollout
    command for later (`qfg set-rollout checkout.new-flow --environment=production --true-percent 10 --confirm`).

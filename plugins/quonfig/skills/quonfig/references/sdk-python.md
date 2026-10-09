@@ -11,6 +11,8 @@ pip install quonfig
 ## Initialize once
 
 ```python
+import os
+
 from quonfig import Quonfig
 
 client = Quonfig(sdk_key=os.environ["QUONFIG_BACKEND_SDK_KEY"])

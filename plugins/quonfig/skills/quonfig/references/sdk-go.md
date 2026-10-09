@@ -13,10 +13,9 @@ go get github.com/quonfig/sdk-go
 ```go
 import quonfig "github.com/quonfig/sdk-go"
 
-// WithSdkKey falls back to $QUONFIG_BACKEND_SDK_KEY when omitted.
-client, err := quonfig.NewClient(
-    quonfig.WithSdkKey(os.Getenv("QUONFIG_BACKEND_SDK_KEY")),
-)
+// With no WithSdkKey option, the SDK reads $QUONFIG_BACKEND_SDK_KEY.
+// (WithSdkKey("") is an error, so don't pass an unset variable through it.)
+client, err := quonfig.NewClient()
 if err != nil {
     log.Fatal(err)
 }
@@ -30,7 +29,7 @@ Local / offline mode (the SDK does not read `QUONFIG_DIR`; pass it):
 
 ```go
 client, err := quonfig.NewClient(
-    quonfig.WithDataDir(os.Getenv("QUONFIG_DIR")),
+    quonfig.WithDataDir("./workspace-data"), // or os.Getenv("QUONFIG_DIR"), if set
     quonfig.WithEnvironment("development"), // or $QUONFIG_ENVIRONMENT
 )
 ```

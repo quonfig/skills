@@ -23,8 +23,9 @@ await quonfig.init();
   `environment` in SDK-key mode (the SDK warns and ignores it).
 - Create one client per process and share it (export it from a module). If the
   app already has one, reuse it — grep for `new Quonfig(` first.
-- Local / offline mode reads a workspace checkout instead of the network. Here
-  `environment` is required, and Node does **not** read `QUONFIG_DIR` itself:
+- Local / offline mode reads a workspace checkout instead of the network. Here an
+  environment is required (`environment` option or `QUONFIG_ENVIRONMENT`), and
+  Node does **not** read `QUONFIG_DIR` itself:
 
 ```typescript
 const quonfig = new Quonfig({
@@ -84,7 +85,8 @@ const typed = new QuonfigTypesafeNode(quonfig);
 typed.flagSmoke({ user: { key: user.id } }); // flag.smoke
 ```
 
-The generated code imports `mustache`; add it as a dependency if missing.
+If any config uses templates, the generated code imports `mustache` (qfg
+prints a note); add it as a dependency then.
 Re-run `qfg generate` after creating keys.
 
 ## Log levels

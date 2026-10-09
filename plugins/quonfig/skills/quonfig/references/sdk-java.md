@@ -25,6 +25,11 @@ Check Maven Central for the latest version. Logging add-ons:
 environment.
 
 ```java
+import com.quonfig.sdk.BoundQuonfig;
+import com.quonfig.sdk.Options;
+import com.quonfig.sdk.Quonfig;
+import com.quonfig.sdk.eval.ContextSet;
+
 Options opts = Options.builder()
     .sdkKey(System.getenv("QUONFIG_BACKEND_SDK_KEY"))
     .build();
@@ -74,6 +79,7 @@ Also `getBool`, `getDouble`, `getStringList`, `getDuration`, `getJson`.
 ## Log levels
 
 `.loggerKey("log-level.my-app")` on the builder, then
-`QuonfigLogbackTurboFilter.install(quonfig)` (or `QuonfigLog4j2Filter.install(quonfig)`).
+`QuonfigLogbackTurboFilter.install(quonfig)` (`com.quonfig.sdk.logback`) or
+`QuonfigLog4j2Filter.install(quonfig)` (`com.quonfig.sdk.log4j2`).
 
 No `qfg generate` target for Java.

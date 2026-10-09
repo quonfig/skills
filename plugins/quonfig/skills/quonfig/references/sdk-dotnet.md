@@ -17,6 +17,8 @@ Companions: `Quonfig.Sdk.AspNetCore`, `Quonfig.Sdk.Extensions.Logging`,
 `QUONFIG_ENVIRONMENT`.
 
 ```csharp
+using Quonfig.Sdk;
+
 await using var quonfig = new Quonfig.Sdk.Quonfig(new QuonfigOptions
 {
     SdkKey = Environment.GetEnvironmentVariable("QUONFIG_BACKEND_SDK_KEY"),
@@ -30,12 +32,13 @@ Local / offline mode (the SDK does not read `QUONFIG_DIR`; set it):
 var options = new QuonfigOptions { Datadir = "./workspace-data", Environment = "development" };
 ```
 
-ASP.NET Core: `builder.Services.AddQuonfig(opts => ...)` registers it with a
+ASP.NET Core (`using Quonfig.Sdk.AspNetCore;`): `builder.Services.AddQuonfig(opts => ...)` registers it with a
 hosted service that drives init and shutdown.
 
 ## Context
 
 ```csharp
+// Context values are string, int, long, double, bool, or string[] (call .ToString() on a Guid).
 var ctx = new ContextSet
 {
     ["user"] = new ContextProperties { ["key"] = user.Id, ["email"] = user.Email },
@@ -67,6 +70,6 @@ Also `GetLong`, `GetBool`, `GetDouble`, `GetStringList`, `GetJson`,
 ## Log levels
 
 Set `LoggerKey = "log-level.my-app"` on the options, then
-`builder.Logging.AddQuonfigFilter(quonfig);`.
+`builder.Logging.AddQuonfigFilter(quonfig);` (`using Quonfig.Sdk.Extensions.Logging;`).
 
 No `qfg generate` target for .NET.

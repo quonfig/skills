@@ -2,7 +2,9 @@
 
 Install: `npm install -g @quonfig/cli`. Every command takes `--json` for
 structured output; prompts turn off automatically when stdin is not a TTY, so
-pass every required flag. `qfg <command> --help` is authoritative.
+pass every required flag — including `--confirm` on `set-default` /
+`set-rollout` and `--yes` on `push` / `delete`, which otherwise refuse to run
+without a terminal. `qfg <command> --help` is authoritative.
 
 ## Auth and workspace
 
@@ -45,10 +47,10 @@ qfg create log-level.checkout-api --type log_level --value WARN
 ## Change what an environment serves
 
 ```bash
-qfg set-default checkout.new-flow --value=true --environment=development
+qfg set-default checkout.new-flow --value=true --environment=development --confirm
 qfg set-rollout checkout.new-flow --environment=staging --true-percent 20 --confirm
 qfg set-rollout checkout.layout --environment=production --weights "control:50,treatment:50" --confirm
-qfg set-default checkout.new-flow --value=false --environment=production --replace-targeting  # kill switch: off for everyone
+qfg set-default checkout.new-flow --value=false --environment=production --replace-targeting --confirm  # kill switch: off for everyone
 ```
 
 `--environment` is required when not interactive. These keep targeting rules
@@ -57,7 +59,8 @@ unless you pass `--replace-targeting` — see [writes.md](writes.md).
 ## Log levels
 
 ```bash
-qfg log-level log-level.checkout-api --value=WARN
+qfg log-level log-level.checkout-api --value=WARN     # creates the key (fails if it exists)
+qfg set-default log-level.checkout-api --value=INFO --environment=production --confirm  # change an existing default
 qfg log-level log-level.checkout-api --target=Checkout.Payments --value=DEBUG --environment=staging
 ```
 
@@ -88,7 +91,7 @@ qfg run --env DATABASE_URL=db.url --environment=staging -- npm run migrate
 
 ```bash
 qfg override checkout.new-flow true --env=development
-qfg override checkout.new-flow --remove
+qfg override checkout.new-flow --remove --env=development
 ```
 
 Fires only for SDK clients that send the `quonfig-user.email` context.
@@ -98,7 +101,7 @@ Fires only for SDK clients that send the `quonfig-user.email` context.
 ```bash
 qfg pull --dir ./quonfig-workspace     # clone/refresh the workspace repo
 qfg verify ./quonfig-workspace         # validate (local, no login)
-qfg push --dir ./quonfig-workspace     # publish committed edits
+qfg push --dir ./quonfig-workspace --yes   # publish committed edits
 qfg config-schema                      # operators, field names, value types
 ```
 

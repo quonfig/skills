@@ -31,5 +31,6 @@ Then remove the call sites, using the payload at `.qf/cleanup/<key>.json`
 After the PR merges and the service redeploys:
 
 ```bash
-qfg cleanup verify my.flag && qfg delete my.flag    # 7-day zero-evaluation gate, then delete
+qfg cleanup verify my.flag                 # 7-day zero-evaluation gate
+qfg delete my.flag --yes                   # only after the engineer agrees
 ```

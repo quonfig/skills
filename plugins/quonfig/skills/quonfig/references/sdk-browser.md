@@ -33,8 +33,8 @@ await quonfig.updateContext({ user: { key: "user-456" } }); // re-fetches
 await quonfig.poll({ frequencyInMs: 60000 }); // optional: keep values fresh
 ```
 
-There are no typed getters and no default argument on `get` — supply your own
-fallback (`quonfig.get("greeting") ?? "Hello"`).
+Besides `get` and `isEnabled` there are only `getDuration` and `getDetails` —
+no typed getters, and no default argument on `get`. Supply your own fallback (`quonfig.get("greeting") ?? "Hello"`).
 
 ## React — `@quonfig/react`
 
