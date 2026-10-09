@@ -1,0 +1,13 @@
+{
+  "name": "quonfig",
+  "description": "Use Quonfig feature flags, dynamic config, and log levels from your application code: pick and wire up the SDK, create flags with the qfg CLI, and manage them through the Quonfig MCP server.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Quonfig",
+    "email": "hello@quonfig.com"
+  },
+  "homepage": "https://docs.quonfig.com/docs/tools/agent-skill",
+  "repository": "https://github.com/quonfig/skills",
+  "license": "MIT",
+  "keywords": ["feature-flags", "configuration", "quonfig", "mcp"]
+}
