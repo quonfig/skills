@@ -88,12 +88,17 @@ edit the JSON there and run `qfg verify`.
   evaluate locally; browser/mobile SDKs use a frontend key and get values
   evaluated for one context. Never ship a backend key to a browser or app.
   Never commit any key.
+- **Secrets never enter the transcript.** Create or rotate them with
+  `--secret --value-from-env <VAR>` or `--value-stdin`, never `--value=`;
+  verify with `qfg get` (redacted fingerprint), never `--reveal`; never `cat`
+  a `.env`. Secrets are string-only. See
+  [references/cli.md](references/cli.md#secrets-encrypted-configs).
 - **The SDK key decides the environment** in server SDKs. Set
   `QUONFIG_ENVIRONMENT` / `environment` only for local datadir mode.
 
 ## 5. More
 
-- Full `qfg` cheat sheet (create types, rollouts, SDK keys, overrides, `qfg run`):
+- Full `qfg` cheat sheet (create types, rollouts, secrets, SDK keys, overrides, `qfg run`):
   [references/cli.md](references/cli.md)
 - Quonfig MCP tools (Slack, claude.ai, no checkout; undo with `set_document`):
   [references/mcp.md](references/mcp.md)

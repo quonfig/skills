@@ -61,6 +61,13 @@ Typed getters: `getString`, `getNumber`, `getBool`, `getStringList`,
 the default `onNoDefault: "error"`, reading a key that does not exist (and has
 no default) throws, so create the key before shipping code that reads it.
 
+## Secrets
+
+`get`/`getString` on a secret returns the decrypted string. The app process
+needs the env var that `quonfig.secrets.encryption.key` is provided by (e.g.
+`QUONFIG_SECRET_KEY_DEFAULT`); without it the read throws. Secrets are
+string-only: `JSON.parse(quonfig.getString("gcp.service-account"))`.
+
 ## Context
 
 ```typescript
