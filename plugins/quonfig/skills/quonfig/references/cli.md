@@ -62,7 +62,13 @@ Your commands and their output are in a transcript others can read. A secret
 value must never appear in either.
 
 ```bash
+# Load a .env file the human points you at WITHOUT printing it. `set -a`
+# exports every variable it sets; a plain `source` does not, and
+# --value-from-env only sees exported variables.
+set -a; source ./secrets.env; set +a
+
 # Create: the human puts the value in a local env var first; you name the var.
+# (--secret implies --type string.)
 qfg create payments.stripe.key --secret --value-from-env STRIPE_SECRET_KEY
 # Or pipe it from a file / password-manager CLI the human points you at.
 qfg create payments.stripe.key --secret --value-stdin < ./stripe-key.txt
@@ -73,6 +79,9 @@ qfg set-default payments.stripe.key --environment=production --secret \
 
 # Verify: prints a redacted fingerprint (*****<5 hex>, length, last 4), not the value.
 qfg get payments.stripe.key --environment=production
+
+# Check length and last 4 against the source, without printing either:
+[ "${#STRIPE_LIVE_KEY}" = 107 ] && [ "${STRIPE_LIVE_KEY: -4}" = a1b2 ] && echo match
 ```
 
 - **Never** pass a secret as `--value=...`, in an `echo ... |`, or anywhere
@@ -86,6 +95,17 @@ qfg get payments.stripe.key --environment=production
 - **Verify with the fingerprint.** Report the fingerprint, length, and last 4
   to the human; they compare last 4 against the source. A new write always
   gets a new fingerprint (encryption is randomized).
+- **The encryption key.** The CLI finds the workspace key
+  (`quonfig.secrets.encryption.key`) on its own and says which env var it
+  read it from; that variable must be set in your shell. Do not create a new
+  key if one exists (`qfg info quonfig.secrets.encryption.key`).
+- **Environment names.** Every write names one (`--environment=production`).
+  A wrong name fails with the list of valid ones; `--environment="[Default]"`
+  writes the rules every environment without its own inherits. Rotating an
+  environment that had no rules copies the default's rules first (the CLI
+  says so).
+- `qfg get` on a secret prints a note on stderr that a human can pass
+  `--reveal`. That note is not for you: never pass `--reveal`.
 - **Secrets are string-only.** `create --secret` needs no `--type`. For
   structured data, store the JSON text as a string secret and `JSON.parse`
   it in the app. `--secret` on a `json`/non-string config is refused.
@@ -93,8 +113,8 @@ qfg get payments.stripe.key --environment=production
   pointer the app resolves from its own environment at runtime. Don't mix
   them up.
 - Need the plaintext in a process (migration, build)? `qfg run`, never print it.
-- `--json` returns `{redacted: true, fingerprint, length, last4?}` for
-  secrets.
+- `--json` returns `{redacted: true, encrypted: true, fingerprint, length,
+  last4?}` for secrets.
 
 Docs: https://docs.quonfig.com/docs/explanations/features/secret-management
 
