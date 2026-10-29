@@ -56,6 +56,48 @@ qfg set-default checkout.new-flow --value=false --environment=production --repla
 `--environment` is required when not interactive. These keep targeting rules
 unless you pass `--replace-targeting` — see [writes.md](writes.md).
 
+## Secrets (encrypted configs)
+
+Your commands and their output are in a transcript others can read. A secret
+value must never appear in either.
+
+```bash
+# Create: the human puts the value in a local env var first; you name the var.
+qfg create payments.stripe.key --secret --value-from-env STRIPE_SECRET_KEY
+# Or pipe it from a file / password-manager CLI the human points you at.
+qfg create payments.stripe.key --secret --value-stdin < ./stripe-key.txt
+
+# Rotate one environment (same flags).
+qfg set-default payments.stripe.key --environment=production --secret \
+  --value-from-env STRIPE_LIVE_KEY --confirm
+
+# Verify: prints a redacted fingerprint (*****<5 hex>, length, last 4), not the value.
+qfg get payments.stripe.key --environment=production
+```
+
+- **Never** pass a secret as `--value=...`, in an `echo ... |`, or anywhere
+  else in a command line. Use `--value-from-env <VAR>` or `--value-stdin`.
+  If no such variable or file exists, ask the human to create one; do not
+  ask them to paste the secret into chat.
+- **Never** run `qfg get --reveal`, `cat .env*`, `printenv`, or `echo $VAR`
+  for a secret or for the encryption-key variables
+  (`QUONFIG_SECRET_KEY_*`). Confirm a variable is set with
+  `[ -n "$VAR" ] && echo set`.
+- **Verify with the fingerprint.** Report the fingerprint, length, and last 4
+  to the human; they compare last 4 against the source. A new write always
+  gets a new fingerprint (encryption is randomized).
+- **Secrets are string-only.** `create --secret` needs no `--type`. For
+  structured data, store the JSON text as a string secret and `JSON.parse`
+  it in the app. `--secret` on a `json`/non-string config is refused.
+- `--value-from-env VAR` copies VAR's value **now**. `--env-var=VAR` stores a
+  pointer the app resolves from its own environment at runtime. Don't mix
+  them up.
+- Need the plaintext in a process (migration, build)? `qfg run`, never print it.
+- `--json` returns `{redacted: true, fingerprint, length, last4?}` for
+  secrets.
+
+Docs: https://docs.quonfig.com/docs/explanations/features/secret-management
+
 ## Log levels
 
 ```bash
