@@ -129,10 +129,12 @@ qfg log-level log-level.checkout-api --target=Checkout.Payments --value=DEBUG --
 ## SDK keys
 
 ```bash
-qfg sdk-key create --environment production --type server    # backend: QUONFIG_BACKEND_SDK_KEY
-qfg sdk-key create --environment development --type browser  # frontend SDKs
+qfg sdk-key create --name "checkout-api" --environment production --type server    # backend: QUONFIG_BACKEND_SDK_KEY
+qfg sdk-key create --name "web-app" --environment development --type browser       # frontend SDKs
 qfg sdk-key list
 ```
+
+`--name` is required (qfg 0.8.0+): name the key after the service or app that uses it, so `qfg sdk-key list` tells you what a key is for and what breaks if you revoke it.
 
 Never commit a key; put it in the app's secret store / `.env` (gitignored).
 
