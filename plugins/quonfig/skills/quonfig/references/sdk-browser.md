@@ -2,7 +2,7 @@
 
 Frontend SDKs **evaluate on the server**: the client sends its context and gets
 back already-evaluated values for that context. Use a **frontend (browser) SDK
-key** (`qfg sdk-key create --environment <env> --type browser`), never the
+key** (`qfg sdk-key create --name <app> --environment <env> --type browser`), never the
 backend key. Only flags/configs sent to client SDKs are visible here
 (`qfg create --type boolean-flag` sets that by default).
 

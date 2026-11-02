@@ -1,7 +1,7 @@
 # Swift (iOS 15+ / macOS 12+) — `Quonfig`
 
 A frontend SDK: it evaluates on the server for one context, so use a
-**frontend (browser) SDK key** (`qfg sdk-key create --environment <env> --type browser`),
+**frontend (browser) SDK key** (`qfg sdk-key create --name <app> --environment <env> --type browser`),
 never the backend key.
 
 ## Install (SwiftPM)
