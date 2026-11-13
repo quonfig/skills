@@ -166,6 +166,8 @@ Fires only for SDK clients that send the `quonfig-user.email` context.
 qfg pull --dir ./quonfig-workspace     # clone/refresh the workspace repo
 qfg verify ./quonfig-workspace         # validate (local, no login)
 qfg push --dir ./quonfig-workspace --yes   # publish committed edits
+qfg push --dir ./quonfig-workspace --propose  # on a branch: open a change request (not live until merged)
+qfg cr list / qfg cr show <n>          # open change requests; the diff a merge would land
 qfg config-schema                      # operators, field names, value types
 ```
 
