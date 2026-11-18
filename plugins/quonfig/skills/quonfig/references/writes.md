@@ -11,6 +11,10 @@ Both surfaces cover the same everyday loop — create a flag or config, change
 what an environment serves, set a log level — and both land as a git commit in
 the workspace repo.
 
+Both can also **propose** instead of writing live, for a change a person must
+merge first (or when your role cannot make it): `qfg ... --propose` / `--cr <n>`,
+or MCP `propose_change_request`. See SKILL.md section 5.
+
 ## Setting a value KEEPS that environment's targeting rules
 
 Both surfaces write the same way, so learn it once:
