@@ -168,7 +168,22 @@ qfg verify ./quonfig-workspace         # validate (local, no login)
 qfg push --dir ./quonfig-workspace --yes   # publish committed edits
 qfg push --dir ./quonfig-workspace --propose  # on a branch: open a change request (not live until merged)
 qfg cr list / qfg cr show <n>          # open change requests; the diff a merge would land
+qfg cr wait <n>                        # exit 0 merged, 2 closed, 4 conflict, 124 timeout
 qfg config-schema                      # operators, field names, value types
+```
+
+## Proposing without a clone
+
+`set-default`, `set-rollout`, `log-level`, `create` and `delete` take
+`--propose` (open a change request instead of writing live; no `--confirm`
+needed) or `--cr <n>` (add to your own open request #n). `--title` and
+`--description` go with `--propose` only. `--json` returns
+`{proposed: true, applied: false, changeRequest}`.
+
+```bash
+qfg set-default checkout.new-flow --value=true --environment=production --propose --title "Beta on in prod"
+qfg set-rollout checkout.new-flow --environment=staging --true-percent 50 --cr 12
+qfg delete checkout.old-flow --propose
 ```
 
 Inside a workspace repo, follow that repo's `AGENTS.md` / `CLAUDE.md`.
